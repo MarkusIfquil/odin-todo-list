@@ -1,4 +1,4 @@
-import Groups from data.js;
+import {Groups} from "./data.js";
 
 export class DOMManipulator {
     sidePanel = document.querySelector(".side-panel");

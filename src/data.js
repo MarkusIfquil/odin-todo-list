@@ -1,34 +1,39 @@
-class Item {
-    text = ""
-    dueDate = ""
-    priority = 0
-    checked = false
+export class Item {
+    constructor(text, dueDate, priority, checked) {
+        this.text = text
+        this.dueDate = dueDate
+        this.priority = priority
+        this.checked = checked
+    }
 }
 
-class TodoList {
+let addRemoveMixin = {
+    addItem(item) {
+        this.items.push(item);
+    },
+    removeItem(item) {
+        this.items.splice(this.items.indexOf(item), 1);
+    }
+};
+
+export class TodoList {
     constructor(title) {
         this.title = title;
         this.tags = [];
         this.items = [];
     }
-
-    addItem(item) {
-        this.items.push(item);
-    }
-    removeItem(item) {
-        this.items.splice(this.items.indexOf(item),1);
-    }
 }
+Object.assign(TodoList.prototype, addRemoveMixin);
 
-class Group {
+export class Group {
     constructor(title) {
         this.title = title;
-        this.lists = [];
+        this.items = [];
     }
 }
+Object.assign(Group.prototype, addRemoveMixin);
 
-class Groups {
-    groups = [];
+export class Groups {
+    items = [];
 }
-
-export {Groups};
+Object.assign(Groups.prototype, addRemoveMixin);
