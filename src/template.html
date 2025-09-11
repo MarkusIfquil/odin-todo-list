@@ -8,9 +8,23 @@
 <body>
     <div class="side-panel">
         <button type="button" id="add-task">add task</button>
+        <p id="add-list">Lists:</p>
+        <div class="lists">
+        </div>
     </div>
     <div class="main-panel">
 
     </div>
+    <form id="add-task-form" class="hidden absolute-centered shadow">
+        <input type="text" name="main-text" id="main-text">
+        <input type="text" name="description" id="description">
+        <input type="date" name="date" id="date">
+        <input type="number" name="priority" id="priority">
+        <select name="list" id="list">
+            <option value="default">default</option>
+        </select>
+        <button type="button" id="cancel">cancel</button>
+        <button type="button" id="submit">add task</button>
+    </form>
 </body>
 </html>
