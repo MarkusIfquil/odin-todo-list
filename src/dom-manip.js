@@ -1,3 +1,5 @@
+import * as Data from "./data";
+
 export class DOMManipulator {
     constructor(Lists) {
         this.Lists = Lists;
@@ -13,42 +15,59 @@ export class DOMManipulator {
         }
     }
 
-    drawMainPanel(List) {
+    drawMainPanel() {
+        let List = Data.State.currentList;
         let mainPanel = document.querySelector(".main-panel");
-        let title = document.createElement("div");
+        mainPanel.innerHTML = "";
+        let title = document.createElement("h1");
         title.textContent = List.title;
         mainPanel.appendChild(title);
         for (const item of List.items) {
-            let itemDiv = document.createElement("div");
-            itemDiv.textContent = item.text;
+            let itemDiv = document.createElement("p");
+            itemDiv.textContent = `- ${item.text}`;
             mainPanel.appendChild(itemDiv);
         }
     }
 
-    showHideForm() {
-        let form = document.querySelector("#add-task-form");
+    showHideForm(form) {
         form.classList.toggle("hidden");
     }
 
-    formSubmit() {
+    taskFormSubmit() {
         let main = document.querySelector("#main-text");
         let desc = document.querySelector("#description");
         let date = document.querySelector("#date");
         let prior = document.querySelector("#priority");
         let list = document.querySelector("#list");
 
-        //add item to list
         this.Lists.appendItemToList(main.value, desc.value, date.value, prior.value, list.value.trim());
+        this.drawMainPanel();
+    }
+
+    listFormSubmit() {
+        let name = document.querySelector("#list-name");
+        this.Lists.addItem(new Data.TodoList(name.value));
         this.drawSidePanel();
     }
 
     addControls() {
         let addTaskButton = document.querySelector("#add-task");
-        addTaskButton.onclick = () => this.showHideForm();
+        addTaskButton.onclick = () => this.showHideForm(document.querySelector("#add-task-form"));
+
         let formSubmitButton = document.querySelector("#submit");
-        formSubmitButton.onclick = () => {this.formSubmit(); this.showHideForm();}
+        formSubmitButton.onclick = () => {this.taskFormSubmit(); this.showHideForm(document.querySelector("#add-task-form"));};
+        
         let cancelButton = document.querySelector("#cancel");
-        cancelButton.onclick = () => this.showHideForm();
+        cancelButton.onclick = () => this.showHideForm(document.querySelector("#add-task-form"));
+
+        let addListButton = document.querySelector("#add-list");
+        addListButton.onclick = () => this.showHideForm(document.querySelector("#add-list-form"));
+
+        let cancelListButton = document.querySelector("#cancel-list");
+        cancelListButton.onclick = () => this.showHideForm(document.querySelector("#add-list-form"));
+
+        let submitListButton = document.querySelector("#submit-list");
+        submitListButton.onclick = () => {this.listFormSubmit(); this.showHideForm(document.querySelector("#add-list-form"));};
     }
 }
 

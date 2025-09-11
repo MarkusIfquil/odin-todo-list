@@ -1,6 +1,9 @@
+@import url('https://cdn.jsdelivr.net/npm/@catppuccin/palette/css/catppuccin.css');
+
 * {
     margin: 0;
     padding: 0;
+    color: var(--ctp-frappe-text);
 }
 
 .hidden {
@@ -14,8 +17,34 @@ body {
     grid-template-columns: 1fr 5fr;
 }
 
+input, select {
+    background-color: var(--ctp-frappe-surface0);
+    
+    border: none;
+    padding: 0.5em;
+}
+
 button {
-    padding: 0.3em;
+    padding: 0.6em;
+    border: 0.1rem solid var(--ctp-frappe-overlay0);
+    border-radius: 0.5rem;
+    background-color: var(--ctp-frappe-surface0);
+}
+
+h1 {
+    font-size: 300%;
+    margin-bottom: 2rem;
+}
+
+form {
+    background-color: var(--ctp-frappe-mantle);
+    
+    padding: 1em;
+    border-radius: 0.5rem;
+
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
 }
 
 .absolute-centered {
@@ -29,14 +58,14 @@ button {
     box-shadow: 0 0 0 1600px rgba(0, 0, 0, 0.65);
 }
 
-form {
-    padding: 1em;
-    background-color: gray;
-}
 
 .side-panel {
+    background-color: var(--ctp-frappe-mantle);
+    
     padding: 1em;
-    background-color: grey;
+    display: flex;
+    flex-flow: column;
+    gap: 1em;
 }
 
 #add-list::after {
@@ -45,4 +74,10 @@ form {
 
 #add-list:hover::after {
     content: " +";
+}
+
+.main-panel {
+    background-color: var(--ctp-frappe-base);
+
+    padding: 1rem;
 }
