@@ -8,7 +8,7 @@
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 body {
@@ -47,7 +47,9 @@ form {
 
     padding: 1em;
     border-radius: 0.5rem;
+}
 
+#add-task-form {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 2fr 1fr 1fr 1fr;

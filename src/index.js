@@ -17,3 +17,4 @@ domManip.drawMainPanel(Lists.currentList);
 
 let formControl = new FormSubmitter(domManip);
 formControl.addControls();
+

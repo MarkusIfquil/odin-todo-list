@@ -33,15 +33,15 @@ export class DOMManipulator {
         for (const item of List.items) {
             let itemDiv = document.createElement("p");
             itemDiv.classList.add("item");
-            let checkBox = document.createElement("input");
-            checkBox.type = "checkbox";
-            checkBox.id = "checked";
-            checkBox.onclick = () => this.onChecked(item,itemDiv);
+            let markComplete = document.createElement("button");
+            markComplete.type = "button";
+            markComplete.id = "mark-complete";
+            markComplete.onclick = () => this.onChecked(item,itemDiv);
 
-            itemDiv.appendChild(checkBox);
+            itemDiv.appendChild(markComplete);
             let textDiv = document.createElement("div");
             textDiv.textContent = item.text;
-            itemDiv.appendChild(textDiv);        
+            itemDiv.appendChild(textDiv); 
             mainPanel.appendChild(itemDiv);
         }
     }
@@ -68,7 +68,7 @@ export class FormSubmitter {
     }
     addControls() {
         let addTaskButton = document.querySelector("#add-task");
-        addTaskButton.onclick = () => this.showHideForm(document.querySelector("#add-task-form"));
+        addTaskButton.onclick = () => {this.addListOptions(); this.showHideForm(document.querySelector("#add-task-form"))};
 
         let formSubmitButton = document.querySelector("#submit");
         formSubmitButton.onclick = () => {this.taskFormSubmit(); this.showHideForm(document.querySelector("#add-task-form"));};
@@ -90,6 +90,17 @@ export class FormSubmitter {
         form.classList.toggle("hidden");
     }
 
+    addListOptions() {
+        let selection = document.querySelector("#list");
+        selection.innerHTML = "";
+        for (const list of this.domManip.Lists.items) {
+            let option = document.createElement("option");
+            option.value = list.title;
+            option.textContent = list.title;
+            selection.appendChild(option);
+        }
+    }
+
     taskFormSubmit() {
         let main = document.querySelector("#main-text");
         let desc = document.querySelector("#description");
@@ -103,6 +114,9 @@ export class FormSubmitter {
 
     listFormSubmit() {
         let name = document.querySelector("#list-name");
+        if(name.value == "") {
+            name.value = `list ${this.domManip.Lists.items.length}`;
+        }
         this.domManip.Lists.addItem(new Data.TodoList(name.value));
         this.domManip.drawUpdate();
     }
