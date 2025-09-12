@@ -32,14 +32,16 @@ export class DOMManipulator {
         
         for (const item of List.items) {
             let itemDiv = document.createElement("p");
-            itemDiv.textContent = `- ${item.text}`;
-        
+            itemDiv.classList.add("item");
             let checkBox = document.createElement("input");
             checkBox.type = "checkbox";
             checkBox.id = "checked";
             checkBox.onclick = () => this.onChecked(item,itemDiv);
 
             itemDiv.appendChild(checkBox);
+            let textDiv = document.createElement("div");
+            textDiv.textContent = `- ${item.text}`;
+            itemDiv.appendChild(textDiv);        
             mainPanel.appendChild(itemDiv);
         }
     }

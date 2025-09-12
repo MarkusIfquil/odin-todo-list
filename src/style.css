@@ -18,9 +18,10 @@ body {
     grid-template-columns: 1fr 3fr;
 }
 
-input, select {
+input,
+select {
     background-color: var(--ctp-frappe-surface0);
-    
+
     border: none;
     padding: 0.5em;
 }
@@ -43,13 +44,30 @@ h1 {
 
 form {
     background-color: var(--ctp-frappe-mantle);
-    
+
     padding: 1em;
     border-radius: 0.5rem;
 
-    display: flex;
-    flex-flow: column;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-rows: 2fr 1fr 1fr 1fr;
     gap: 1em;
+}
+
+#main-text,
+#description {
+    grid-column: 1 / 4;
+}
+
+#main-text {
+    font-size: 200%;
+}
+
+.buttons {
+    grid-column: 1/4;
+    display: flex;
+    gap: 1em;
+    justify-content: end;
 }
 
 .hover:hover {
@@ -67,10 +85,9 @@ form {
     box-shadow: 0 0 0 1600px rgba(0, 0, 0, 0.65);
 }
 
-
 .side-panel {
     background-color: var(--ctp-frappe-mantle);
-    
+
     padding: 1em;
     display: flex;
     flex-flow: column;
@@ -96,11 +113,11 @@ form {
     gap: 0.5em;
 }
 
-.lists > * {
-    text-align: center; 
-    
+.lists>* {
+    text-align: center;
+
     padding-inline: 1em;
-    padding-block: 0.5em;    
+    padding-block: 0.5em;
 
     border-radius: 0.5rem;
 }
@@ -113,4 +130,9 @@ form {
     background-color: var(--ctp-frappe-base);
 
     padding: 1rem;
+}
+
+.item {
+    display: flex;
+    gap: 1em;
 }
