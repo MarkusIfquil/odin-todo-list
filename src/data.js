@@ -41,9 +41,9 @@ export class Lists {
     items = [];
     currentList;
 
-    appendItemToList(main, desc, date, prior, listName) {
+    appendItemToList(item, listName) {
         let list = this.items.find(j => j.title == listName);
-        let item = new Item(main, desc, date, prior, false, list);
+        item.parent = list;
         list.addItem(item);
     }
 }

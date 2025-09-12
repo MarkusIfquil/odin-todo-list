@@ -33,15 +33,15 @@ export class DOMManipulator {
         for (const item of List.items) {
             let itemDiv = document.createElement("p");
             itemDiv.classList.add("item");
+            
             let markComplete = document.createElement("button");
             markComplete.type = "button";
             markComplete.id = "mark-complete";
             markComplete.onclick = () => this.onChecked(item,itemDiv);
-
             itemDiv.appendChild(markComplete);
             let textDiv = document.createElement("div");
             textDiv.textContent = item.text;
-            itemDiv.appendChild(textDiv); 
+            itemDiv.appendChild(textDiv);
             mainPanel.appendChild(itemDiv);
         }
     }
@@ -108,7 +108,7 @@ export class FormSubmitter {
         let prior = document.querySelector("#priority");
         let list = document.querySelector("#list");
 
-        this.domManip.Lists.appendItemToList(main.value, desc.value, date.value, prior.value, list.value.trim());
+        this.domManip.Lists.appendItemToList(new Data.Item(main.value, desc.value, date.value, prior.value), list.value.trim());
         this.domManip.drawUpdate();
     }
 

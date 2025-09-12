@@ -1,6 +1,14 @@
 @import url('https://cdn.jsdelivr.net/npm/@catppuccin/palette/css/catppuccin.css');
+@import url("https://www.nerdfonts.com/assets/css/webfont.css");
+
+@font-face {
+    font-family: jetbrains;
+    src: url(./font/JetBrainsMonoNerdFontPropo-Regular.ttf);
+}
 
 * {
+    font-family: jetbrains;
+
     margin: 0;
     padding: 0;
     color: var(--ctp-frappe-text);
@@ -96,8 +104,22 @@ form {
     gap: 1em;
 }
 
+.actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#open-panel {
+    background-color: inherit;
+    border: inherit;
+    font-size: 150%;
+    padding: 0;
+    padding-inline: 0.5rem;
+}
+
 #add-list {
-    padding: 0.5em;
+    padding-block: 0.5em;
     border-radius: 0.5rem;
 }
 
@@ -117,9 +139,7 @@ form {
 
 .lists>* {
     text-align: center;
-
-    padding-inline: 1em;
-    padding-block: 0.5em;
+    padding: 0.7em;
 
     border-radius: 0.5rem;
 }
@@ -132,9 +152,11 @@ form {
     background-color: var(--ctp-frappe-base);
 
     padding: 1rem;
+    padding-inline: 2rem;
 }
 
 .item {
     display: flex;
     gap: 1em;
 }
+
