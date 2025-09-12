@@ -1,13 +1,3 @@
-export class Item {
-    constructor(text, desc = "", dueDate, priority = 0, checked = false) {
-        this.text = text;
-        this.desc = desc;
-        this.dueDate = dueDate;
-        this.priority = priority;
-        this.checked = checked;
-    }
-}
-
 let addRemoveMixin = {
     addItem(item) {
         this.items.push(item);
@@ -20,8 +10,23 @@ let addRemoveMixin = {
     },
     findItemThatHasThis(item) {
         return this.items.find(i => i.findItem(item) != undefined);
+    },
+    removeFromParent() {
+        this.parent.removeItem(this);
     }
 };
+
+export class Item {
+    constructor(text, desc = "", dueDate, priority = 0, checked = false, parent) {
+        this.text = text;
+        this.desc = desc;
+        this.dueDate = dueDate;
+        this.priority = priority;
+        this.checked = checked;
+        this.parent = parent;
+    }
+}
+Object.assign(Item.prototype, addRemoveMixin);
 
 export class TodoList {
     constructor(title) {
@@ -36,8 +41,8 @@ export class Lists {
     items = [];
 
     appendItemToList(main, desc, date, prior, listName) {
-        let item = new Item(main, desc, date, prior);
         let list = this.items.find(j => j.title == listName);
+        let item = new Item(main, desc, date, prior, false, list);
         list.addItem(item);
     }
 }

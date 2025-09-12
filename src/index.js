@@ -7,7 +7,7 @@ let Lists = new Data.Lists;
 let defaultList = new Data.TodoList("default");
 Data.State.currentList = defaultList;
 
-let defaultItem = new Data.Item("default todo","hi","uh idk");
+let defaultItem = new Data.Item("default todo","hi","uh idk",0,false,defaultList);
 defaultList.addItem(defaultItem);
 
 Lists.addItem(defaultList);

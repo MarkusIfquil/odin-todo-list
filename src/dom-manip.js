@@ -11,22 +11,42 @@ export class DOMManipulator {
         for (const list of this.Lists.items) {
             let listElement = document.createElement("div");
             listElement.textContent = list.title;
+            listElement.classList.add("hover");
+            listElement.onclick = () => this.changeActiveList(list);
+            if(list == Data.State.currentList) {
+                listElement.classList.add("active-list");
+            }
             listsDiv.appendChild(listElement);
         }
     }
 
     drawMainPanel() {
         let List = Data.State.currentList;
+
         let mainPanel = document.querySelector(".main-panel");
         mainPanel.innerHTML = "";
+
         let title = document.createElement("h1");
         title.textContent = List.title;
         mainPanel.appendChild(title);
+        
         for (const item of List.items) {
             let itemDiv = document.createElement("p");
             itemDiv.textContent = `- ${item.text}`;
+        
+            let checkBox = document.createElement("input");
+            checkBox.type = "checkbox";
+            checkBox.id = "checked";
+            checkBox.onclick = () => this.onChecked(item,itemDiv);
+
+            itemDiv.appendChild(checkBox);
             mainPanel.appendChild(itemDiv);
         }
+    }
+
+    drawUpdate() {
+        this.drawMainPanel();
+        this.drawSidePanel();
     }
 
     showHideForm(form) {
@@ -48,6 +68,16 @@ export class DOMManipulator {
         let name = document.querySelector("#list-name");
         this.Lists.addItem(new Data.TodoList(name.value));
         this.drawSidePanel();
+    }
+
+    changeActiveList(list) {
+        Data.State.currentList = list;
+        this.drawUpdate();
+    }
+
+    onChecked(item, div) {
+        item.removeFromParent();
+        div.innerHTML = "";        
     }
 
     addControls() {
