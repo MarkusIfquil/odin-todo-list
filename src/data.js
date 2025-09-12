@@ -39,6 +39,7 @@ Object.assign(TodoList.prototype, addRemoveMixin);
 
 export class Lists {
     items = [];
+    currentList;
 
     appendItemToList(main, desc, date, prior, listName) {
         let list = this.items.find(j => j.title == listName);
@@ -47,7 +48,3 @@ export class Lists {
     }
 }
 Object.assign(Lists.prototype, addRemoveMixin);
-
-export class State {
-    static currentList;
-}

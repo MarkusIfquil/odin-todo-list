@@ -13,7 +13,7 @@ export class DOMManipulator {
             listElement.textContent = list.title;
             listElement.classList.add("hover");
             listElement.onclick = () => this.changeActiveList(list);
-            if(list == Data.State.currentList) {
+            if(list == this.Lists.currentList) {
                 listElement.classList.add("active-list");
             }
             listsDiv.appendChild(listElement);
@@ -21,7 +21,7 @@ export class DOMManipulator {
     }
 
     drawMainPanel() {
-        let List = Data.State.currentList;
+        let List = this.Lists.currentList;
 
         let mainPanel = document.querySelector(".main-panel");
         mainPanel.innerHTML = "";
@@ -40,7 +40,7 @@ export class DOMManipulator {
 
             itemDiv.appendChild(checkBox);
             let textDiv = document.createElement("div");
-            textDiv.textContent = `- ${item.text}`;
+            textDiv.textContent = item.text;
             itemDiv.appendChild(textDiv);        
             mainPanel.appendChild(itemDiv);
         }
@@ -51,37 +51,21 @@ export class DOMManipulator {
         this.drawSidePanel();
     }
 
-    showHideForm(form) {
-        form.classList.toggle("hidden");
-    }
-
-    taskFormSubmit() {
-        let main = document.querySelector("#main-text");
-        let desc = document.querySelector("#description");
-        let date = document.querySelector("#date");
-        let prior = document.querySelector("#priority");
-        let list = document.querySelector("#list");
-
-        this.Lists.appendItemToList(main.value, desc.value, date.value, prior.value, list.value.trim());
-        this.drawMainPanel();
-    }
-
-    listFormSubmit() {
-        let name = document.querySelector("#list-name");
-        this.Lists.addItem(new Data.TodoList(name.value));
-        this.drawSidePanel();
-    }
-
     changeActiveList(list) {
-        Data.State.currentList = list;
+        this.Lists.currentList = list;
         this.drawUpdate();
     }
 
     onChecked(item, div) {
         item.removeFromParent();
-        div.innerHTML = "";        
+        div.innerHTML = "";
     }
+}
 
+export class FormSubmitter {
+    constructor(domManip) {
+        this.domManip = domManip;
+    }
     addControls() {
         let addTaskButton = document.querySelector("#add-task");
         addTaskButton.onclick = () => this.showHideForm(document.querySelector("#add-task-form"));
@@ -101,5 +85,25 @@ export class DOMManipulator {
         let submitListButton = document.querySelector("#submit-list");
         submitListButton.onclick = () => {this.listFormSubmit(); this.showHideForm(document.querySelector("#add-list-form"));};
     }
-}
 
+    showHideForm(form) {
+        form.classList.toggle("hidden");
+    }
+
+    taskFormSubmit() {
+        let main = document.querySelector("#main-text");
+        let desc = document.querySelector("#description");
+        let date = document.querySelector("#date");
+        let prior = document.querySelector("#priority");
+        let list = document.querySelector("#list");
+
+        this.domManip.Lists.appendItemToList(main.value, desc.value, date.value, prior.value, list.value.trim());
+        this.domManip.drawUpdate();
+    }
+
+    listFormSubmit() {
+        let name = document.querySelector("#list-name");
+        this.domManip.Lists.addItem(new Data.TodoList(name.value));
+        this.domManip.drawUpdate();
+    }
+}
