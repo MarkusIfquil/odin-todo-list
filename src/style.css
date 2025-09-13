@@ -19,11 +19,15 @@
     display: none !important;
 }
 
+.collapse {
+    min-width: 0 !important;
+}
+
 body {
     min-width: 100vw;
     min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 3fr;
+    display: flex;
+    /* grid-template-columns: 1fr 3fr; */
 }
 
 input,
@@ -46,8 +50,8 @@ button:hover {
 }
 
 h1 {
-    font-size: 300%;
-    margin-bottom: 2rem;
+    font-size: 400%;
+    margin-bottom: 0.7em;
 }
 
 form {
@@ -96,6 +100,8 @@ form {
 }
 
 .side-panel {
+    min-width: 20rem;
+
     background-color: var(--ctp-frappe-mantle);
 
     padding: 1em;
@@ -149,9 +155,11 @@ form {
 }
 
 .main-panel {
+    flex: 1;
+
     background-color: var(--ctp-frappe-base);
 
-    padding: 1rem;
+    padding: 1.5rem;
     padding-inline: 2rem;
 }
 
@@ -159,4 +167,3 @@ form {
     display: flex;
     gap: 1em;
 }
-
