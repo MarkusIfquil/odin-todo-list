@@ -80,6 +80,7 @@ export class DOMManipulator {
 
         for (const item of List.items) {
             let itemDiv = document.createElement("p");
+            itemDiv.item = item;
             itemDiv.classList.add("item");
 
             let markCompleteButton = document.createElement("button");
@@ -89,6 +90,9 @@ export class DOMManipulator {
             itemDiv.appendChild(markCompleteButton);
 
             let itemAttrDiv = document.createElement("div");
+            itemAttrDiv.style.flex = "1 1 0";
+            itemAttrDiv.style.paddingInline = "0.5em";
+            itemAttrDiv.style.borderRadius = "0.5em";
             let text = document.createElement("p");
             text.textContent = item.text;
             let desc = document.createElement("p");
@@ -110,8 +114,34 @@ export class DOMManipulator {
 
             itemDiv.appendChild(itemAttrDiv);
 
+            let editButton = document.createElement("button");
+            editButton.textContent = "edit";
+            editButton.classList.add("action-button");
+            editButton.onclick = () => {
+                itemAttrDiv.contentEditable = "true";
+                itemAttrDiv.style.border = "solid";
+                saveButton.classList.toggle("hidden");
+                editButton.classList.toggle("hidden");
+            };
+            itemDiv.appendChild(editButton);
+
+            let saveButton = document.createElement("button");
+            saveButton.textContent = "save";
+            saveButton.classList.add("hidden", "action-button");
+            saveButton.onclick = () => {
+                itemAttrDiv.contentEditable = "false";
+                itemAttrDiv.style.border = "";
+                saveButton.classList.toggle("hidden");
+                editButton.classList.toggle("hidden");
+                itemDiv.item.text = text.textContent;
+                itemDiv.item.desc = desc.textContent;
+                itemDiv.item.dueDate = date.textContent;
+            };
+            itemDiv.appendChild(saveButton);
+
             itemsDiv.appendChild(itemDiv);
         }
+
         mainPanel.appendChild(itemsDiv);
     }
 

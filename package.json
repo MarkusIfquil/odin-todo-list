@@ -22,7 +22,10 @@
   "dependencies": {
     "@catppuccin/palette": "^1.7.1",
     "date-fns": "^4.1.0",
-    "localStorage": "^1.0.4"
+    "localStorage": "^1.0.4",
+    "node-polyfill-webpack-plugin": "^4.1.0",
+    "util": "^0.12.5",
+    "vm-browserify": "^1.1.2"
   },
   "description": ""
 }
