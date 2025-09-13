@@ -25,6 +25,9 @@ export class DOMManipulator {
         let addTaskButton = document.createElement("button");
         addTaskButton.textContent = "add task";
         addTaskButton.id = "add-task";
+        let formSubmitter = new FormSubmitter(this);
+        addTaskButton.onclick = () => { formSubmitter.addListOptions(); formSubmitter.showHideForm(document.querySelector("#add-task-form")) };
+
         panel.appendChild(addTaskButton);
 
         let ListsP = document.createElement("p");
@@ -73,17 +76,26 @@ export class DOMManipulator {
             let itemDiv = document.createElement("p");
             itemDiv.classList.add("item");
 
-            let markComplete = document.createElement("button");
-            markComplete.textContent = "X";
-            markComplete.id = "mark-complete";
-            markComplete.onclick = () => this.onChecked(item, itemDiv);
+            let markCompleteButton = document.createElement("button");
+            markCompleteButton.textContent = "X";
+            markCompleteButton.classList.add("mark-complete");
+            markCompleteButton.onclick = () => this.onChecked(item, itemDiv);
 
-            itemDiv.appendChild(markComplete);
+            itemDiv.appendChild(markCompleteButton);
 
-            let textDiv = document.createElement("div");
-            textDiv.textContent = item.text;
+            let itemAttrDiv = document.createElement("div");
+            let text = document.createElement("p");
+            text.textContent = item.text;
+            let desc = document.createElement("p");
+            desc.textContent = item.desc;
+            let date = document.createElement("p");
+            date.textContent = item.dueDate;
+            let priority = document.createElement("p");
+            priority.textContent = item.priority;
 
-            itemDiv.appendChild(textDiv);
+            itemAttrDiv.append(text, desc, date, priority);
+
+            itemDiv.appendChild(itemAttrDiv);
 
             mainPanel.appendChild(itemDiv);
         }
@@ -110,9 +122,6 @@ export class FormSubmitter {
         this.domManip = domManip;
     }
     addControls() {
-        let addTaskButton = document.querySelector("#add-task");
-        addTaskButton.onclick = () => { this.addListOptions(); this.showHideForm(document.querySelector("#add-task-form")) };
-
         let formSubmitButton = document.querySelector("#submit");
         formSubmitButton.onclick = () => { this.taskFormSubmit(); this.showHideForm(document.querySelector("#add-task-form")); };
 

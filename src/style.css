@@ -45,6 +45,11 @@ button {
     background-color: var(--ctp-frappe-surface0);
 }
 
+.mark-complete {
+    padding-inline: 0.5em;
+    padding-block: 0.3em;
+}
+
 button:hover {
     background-color: rgba(var(--ctp-frappe-surface0-rgb) / 0.5);
 }
@@ -165,5 +170,8 @@ form {
 
 .item {
     display: flex;
+    align-items: start;
     gap: 1em;
+
+
 }
