@@ -5,53 +5,54 @@ export class DOMManipulator {
         this.Lists = Lists;
     }
 
+    constructElement(type, text, id, classes) {
+        let element = document.createElement(type);
+        element.textContent = text;
+        element.id = id;
+        element.classList = classes;
+        return element;
+    }
+
     drawSidePanel() {
+        //panel
         let panel = document.querySelector(".side-panel");
         panel.innerHTML = "";
+
+        //actions
         let actionsDiv = document.createElement("div");
+        actionsDiv.innerHTML = `
+            <p>User</p>
+            <button id="close-panel" class="nf-cod-layout_sidebar_left"></button>
+        `;
         actionsDiv.classList.add("actions");
-
-        let nameP = document.createElement("p");
-        nameP.textContent = "User";
-        actionsDiv.appendChild(nameP);
-
-        let closeButton = document.createElement("button");
-        closeButton.onclick = () => this.closeSidePanel();
-        closeButton.classList.add("nf-cod-layout_sidebar_left");
-        actionsDiv.appendChild(closeButton);
-
         panel.appendChild(actionsDiv);
 
-        let addTaskButton = document.createElement("button");
-        addTaskButton.textContent = "add task";
-        addTaskButton.id = "add-task";
+        //buttons
+        let closeButton = document.querySelector("#close-panel");
+        closeButton.onclick = () => this.closeSidePanel();
+
+        let addTaskButton = this.constructElement("button","add task","add-task");
+
         let formSubmitter = new FormSubmitter(this);
         addTaskButton.onclick = () => { formSubmitter.addListOptions(); formSubmitter.showHideForm(document.querySelector("#add-task-form")) };
 
-        panel.appendChild(addTaskButton);
-
-        let ListsP = document.createElement("p");
-        ListsP.textContent = "Lists";
-        ListsP.id = "add-list";
-        ListsP.classList.add("hover");
-
+        //lists
+        let ListsP = this.constructElement("p","Lists","add-list",["hover"]);
         ListsP.onclick = () => formSubmitter.showHideForm(document.querySelector("#add-list-form"));
 
-        panel.appendChild(ListsP);
-
-        let listsDiv = document.createElement("div");
-        listsDiv.classList.add("lists");
+        let listsDiv = this.constructElement("div","","","lists");
         for (const list of this.Lists.items) {
-            let listElement = document.createElement("div");
-            listElement.textContent = list.title;
-            listElement.classList.add("hover", "list");
+            let listElement = this.constructElement("div",list.title,"",["hover","list"]);
             listElement.onclick = () => this.changeActiveList(list);
+
             if (list == this.Lists.currentList) {
                 listElement.classList.add("active-list");
             }
+
             listsDiv.appendChild(listElement);
         }
-        panel.appendChild(listsDiv);
+
+        panel.append(addTaskButton, ListsP, listsDiv);
     }
 
     closeSidePanel() {
@@ -61,6 +62,7 @@ export class DOMManipulator {
 
         let openButton = document.createElement("button");
         openButton.onclick = () => { panel.classList.toggle("collapse"); this.drawSidePanel(); };
+
         panel.appendChild(openButton);
 
     }
@@ -71,24 +73,24 @@ export class DOMManipulator {
         let mainPanel = document.querySelector(".main-panel");
         mainPanel.innerHTML = "";
 
-        let title = document.createElement("h1");
-        title.textContent = List.title;
+        let title = this.constructElement("h1",List.title);
         mainPanel.appendChild(title);
 
-        let itemsDiv = document.createElement("div");
-        itemsDiv.classList.add("items");
+        let itemsDiv = this.constructElement("div","","",["items"]);
 
         for (const item of List.items) {
-            let itemDiv = document.createElement("p");
+            //outer div
+            let itemDiv = this.constructElement("p","","",["item"]);
             itemDiv.item = item;
-            itemDiv.classList.add("item");
 
+            //inside
             let markCompleteButton = document.createElement("button");
             markCompleteButton.classList.add("mark-complete");
-            markCompleteButton.onclick = () => this.onChecked(item, itemDiv);
+            markCompleteButton.onclick = () => this.onChecked(item);
 
             itemDiv.appendChild(markCompleteButton);
 
+            //item attributes
             let itemAttrDiv = document.createElement("div");
             itemAttrDiv.style.flex = "1 1 0";
             itemAttrDiv.style.paddingInline = "0.5em";
@@ -114,6 +116,7 @@ export class DOMManipulator {
 
             itemDiv.appendChild(itemAttrDiv);
 
+            //buttons
             let editButton = document.createElement("button");
             editButton.textContent = "edit";
             editButton.classList.add("action-button");
@@ -155,9 +158,9 @@ export class DOMManipulator {
         this.drawUpdate();
     }
 
-    onChecked(item, div) {
+    onChecked(item) {
         item.removeFromParent();
-        div.innerHTML = "";
+        this.drawUpdate();
     }
 }
 
@@ -172,16 +175,11 @@ export class FormSubmitter {
         let cancelButton = document.querySelector("#cancel");
         cancelButton.onclick = () => this.showHideForm(document.querySelector("#add-task-form"));
 
-
-
         let cancelListButton = document.querySelector("#cancel-list");
         cancelListButton.onclick = () => this.showHideForm(document.querySelector("#add-list-form"));
 
         let submitListButton = document.querySelector("#submit-list");
         submitListButton.onclick = () => { this.listFormSubmit(); this.showHideForm(document.querySelector("#add-list-form")); };
-
-        // let togglePanelButton = document.querySelector("#open-panel");
-        // togglePanelButton.onclick = () => this.domManip.closeSidePanel();
     }
 
     showHideForm(form) {
