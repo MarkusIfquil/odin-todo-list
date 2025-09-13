@@ -15,6 +15,10 @@
     box-sizing: border-box;
 }
 
+.subtext {
+    color: var(--ctp-frappe-subtext0);
+}
+
 .hidden {
     display: none !important;
 }
@@ -46,12 +50,17 @@ button {
 }
 
 .mark-complete {
-    padding-inline: 0.5em;
-    padding-block: 0.3em;
+    min-width: 2.7em;
+    min-height: 2.7em;
+    border-radius: 3em;
 }
 
 button:hover {
     background-color: rgba(var(--ctp-frappe-surface0-rgb) / 0.5);
+}
+
+.mark-complete:hover::after {
+    content: "X";
 }
 
 h1 {
@@ -168,10 +177,16 @@ form {
     padding-inline: 2rem;
 }
 
+.items {
+    display: flex;
+    flex-flow: column;
+    gap: 2em;
+}
+
 .item {
     display: flex;
     align-items: start;
     gap: 1em;
 
-
+    font-size: 120%;
 }

@@ -34,6 +34,9 @@ export class DOMManipulator {
         ListsP.textContent = "Lists";
         ListsP.id = "add-list";
         ListsP.classList.add("hover");
+
+        ListsP.onclick = () => formSubmitter.showHideForm(document.querySelector("#add-list-form"));
+
         panel.appendChild(ListsP);
 
         let listsDiv = document.createElement("div");
@@ -72,12 +75,14 @@ export class DOMManipulator {
         title.textContent = List.title;
         mainPanel.appendChild(title);
 
+        let itemsDiv = document.createElement("div");
+        itemsDiv.classList.add("items");
+
         for (const item of List.items) {
             let itemDiv = document.createElement("p");
             itemDiv.classList.add("item");
 
             let markCompleteButton = document.createElement("button");
-            markCompleteButton.textContent = "X";
             markCompleteButton.classList.add("mark-complete");
             markCompleteButton.onclick = () => this.onChecked(item, itemDiv);
 
@@ -88,17 +93,26 @@ export class DOMManipulator {
             text.textContent = item.text;
             let desc = document.createElement("p");
             desc.textContent = item.desc;
+            desc.classList.add("subtext");
+
+            let othersDiv = document.createElement("div");
+            othersDiv.style.display = "flex";
+            othersDiv.style.gap = "1em";
+
             let date = document.createElement("p");
             date.textContent = item.dueDate;
+            date.classList.add("date");
             let priority = document.createElement("p");
-            priority.textContent = item.priority;
+            priority.textContent = `priority: ${item.priority}`;
+            othersDiv.append(date, priority);
 
-            itemAttrDiv.append(text, desc, date, priority);
+            itemAttrDiv.append(text, desc, othersDiv);
 
             itemDiv.appendChild(itemAttrDiv);
 
-            mainPanel.appendChild(itemDiv);
+            itemsDiv.appendChild(itemDiv);
         }
+        mainPanel.appendChild(itemsDiv);
     }
 
     drawUpdate() {
@@ -128,8 +142,7 @@ export class FormSubmitter {
         let cancelButton = document.querySelector("#cancel");
         cancelButton.onclick = () => this.showHideForm(document.querySelector("#add-task-form"));
 
-        let addListButton = document.querySelector("#add-list");
-        addListButton.onclick = () => this.showHideForm(document.querySelector("#add-list-form"));
+
 
         let cancelListButton = document.querySelector("#cancel-list");
         cancelListButton.onclick = () => this.showHideForm(document.querySelector("#add-list-form"));
