@@ -13,18 +13,8 @@
     padding: 0;
     color: var(--ctp-frappe-text);
     box-sizing: border-box;
-}
 
-.subtext {
-    color: var(--ctp-frappe-subtext0);
-}
-
-.hidden {
-    display: none !important;
-}
-
-.collapse {
-    min-width: 0 !important;
+    --highlight: var(--ctp-frappe-mauve);
 }
 
 body {
@@ -44,28 +34,38 @@ select {
 
 button {
     padding: 0.6em;
-    border: 0.1rem solid var(--ctp-frappe-overlay0);
+    border: 0.125rem solid var(--ctp-frappe-overlay0);
     border-radius: 0.5rem;
-    background-color: var(--ctp-frappe-surface0);
+    background-color: var(--ctp-frappe-mantle);
+    color: var(--highlight);
+}
+
+.add-task-button {
+    font-weight: bold;
+    font-size: 110%;
+    text-align: start;
+    border: none;
 }
 
 .mark-complete {
-    min-width: 2.7em;
-    min-height: 2.7em;
+    min-width: 3.6rem;
+    min-height: 3.6rem;
     border-radius: 3em;
-}
-
-button:hover {
-    background-color: rgba(var(--ctp-frappe-surface0-rgb) / 0.5);
+    font-size: 110%;
 }
 
 .mark-complete:hover::after {
     content: "X";
 }
 
+.action-button {
+    font-size: 130%;
+    min-width: 2.7em;
+    border-radius: 3em;
+}
+
 h1 {
     font-size: 400%;
-    margin-bottom: 0.7em;
 }
 
 form {
@@ -81,6 +81,15 @@ form {
     grid-template-rows: 2fr 1fr 1fr 1fr;
     gap: 1em;
 }
+
+.subtext {
+    color: var(--ctp-frappe-subtext0);
+}
+
+.hidden {
+    display: none !important;
+}
+
 
 #main-text,
 #description {
@@ -98,8 +107,9 @@ form {
     justify-content: end;
 }
 
-.hover:hover {
-    background-color: rgba(var(--ctp-frappe-surface0-rgb) / 0.5);
+.hover:hover,
+button:hover {
+    filter: brightness(110%);
 }
 
 .absolute-centered {
@@ -116,12 +126,16 @@ form {
 .side-panel {
     min-width: 20rem;
 
-    background-color: var(--ctp-frappe-mantle);
+    background-color: var(--ctp-frappe-crust);
 
     padding: 1em;
     display: flex;
     flex-flow: column;
     gap: 1em;
+}
+
+.collapse {
+    min-width: 0 !important;
 }
 
 .actions {
@@ -171,33 +185,9 @@ form {
 }
 
 .active-list {
-    background-color: var(--ctp-frappe-overlay0);
+    background-color: var(--highlight);
+    color: var(--ctp-frappe-crust);
 }
-
-.main-panel {
-    flex: 1;
-
-    background-color: var(--ctp-frappe-base);
-
-    padding: 1.5rem;
-    padding-inline: 2rem;
-}
-
-.items {
-    display: flex;
-    flex-flow: column;
-    gap: 2em;
-}
-
-.item {
-    display: flex;
-    align-items: start;
-    gap: 1em;
-
-    font-size: 120%;
-}
-
-/* .action-button {} */
 
 .drop-down {
     position: absolute;
@@ -213,4 +203,41 @@ form {
     display: flex;
     flex-flow: column;
     gap: 0.5em;
+}
+
+.main-panel {
+    flex: 1;
+
+    display: flex;
+    flex-flow: column;
+
+    background-color: var(--ctp-frappe-base);
+
+}
+
+.title {
+    padding-block: 0.25em;
+    padding-inline: 0.5em;
+    background-color: var(--ctp-frappe-mantle);
+}
+
+.items {
+    margin: 2rem;
+    background-color: var(--ctp-frappe-overlay0);
+
+    display: flex;
+    flex-flow: column;
+    gap: 0.1em;
+}
+
+.item {
+    padding-block: 1em;
+
+    background-color: var(--ctp-frappe-base);
+
+    display: flex;
+    align-items: start;
+    gap: 1em;
+
+    font-size: 120%;
 }

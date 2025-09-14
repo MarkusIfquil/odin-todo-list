@@ -4,7 +4,7 @@ import * as Data from "./data";
 
 let Lists = new Data.Lists;
 
-let defaultList = new Data.TodoList("default");
+let defaultList = new Data.TodoList("Default");
 Lists.currentList = defaultList;
 
 let defaultItem = new Data.Item("default todo", "hi", "2025", 0, false, defaultList);

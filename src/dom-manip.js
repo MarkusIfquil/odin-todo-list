@@ -31,7 +31,7 @@ export class DOMManipulator {
         let actionsDiv = document.createElement("div");
         actionsDiv.innerHTML = `
             <p>User</p>
-            <button id="close-panel" class="nf-cod-layout_sidebar_left"></button>
+            <button id="close-panel"><-</button>
         `;
         actionsDiv.classList.add("actions");
         panel.appendChild(actionsDiv);
@@ -40,7 +40,7 @@ export class DOMManipulator {
         let closeButton = document.querySelector("#close-panel");
         closeButton.onclick = () => this.closeSidePanel();
 
-        let addTaskButton = this.constructElement("button", "add task", "add-task");
+        let addTaskButton = this.constructElement("button", "+ add task", "add-task", ["add-task-button"]);
         addTaskButton.onclick = () => {
             this.formSubmitter.addListOptions();
             this.formSubmitter.showHideForm(document.querySelector("#add-task-form"))
@@ -63,6 +63,7 @@ export class DOMManipulator {
             //... button
             let actionsButton = this.constructElement("button", "...");
             actionsButton.style.backgroundColor = "inherit";
+            actionsButton.style.color = "var(--ctp-frappe-crust)";
             actionsButton.style.border = "inherit";
             actionsButton.onclick = (e) => {
                 e.stopPropagation();
@@ -81,7 +82,7 @@ export class DOMManipulator {
         panel.innerHTML = "";
         panel.classList.toggle("collapse");
 
-        let openButton = document.createElement("button");
+        let openButton = this.constructElement("button", "->");
         openButton.onclick = () => { panel.classList.toggle("collapse"); this.drawSidePanel(); };
 
         panel.appendChild(openButton);
@@ -93,7 +94,7 @@ export class DOMManipulator {
         let mainPanel = document.querySelector(".main-panel");
         mainPanel.innerHTML = "";
 
-        let title = this.constructElement("h1", List.title);
+        let title = this.constructElement("h1", List.title, "", ["title"]);
         mainPanel.appendChild(title);
 
         let itemsDiv = this.constructElement("div", "", "", ["items"]);
@@ -137,17 +138,13 @@ export class DOMManipulator {
             itemDiv.appendChild(itemAttrDiv);
 
             //buttons
-            let editButton = document.createElement("button");
-            editButton.textContent = "edit";
-            editButton.classList.add("action-button");
+            let editButton = this.constructElement("button", "", "", ["action-button"]);
             editButton.onclick = () => {
                 this.changeEditable(itemAttrDiv, saveButton, editButton);
             };
             itemDiv.appendChild(editButton);
 
-            let saveButton = document.createElement("button");
-            saveButton.textContent = "save";
-            saveButton.classList.add("hidden", "action-button");
+            let saveButton = this.constructElement("button", "", "", ["hidden", "action-button"]);
             saveButton.onclick = () => {
                 this.changeEditable(itemAttrDiv, saveButton, editButton);
                 itemDiv.item.text = text.textContent;
