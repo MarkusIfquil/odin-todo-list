@@ -99,7 +99,7 @@ export class DOMManipulator {
         mainPanel.appendChild(title);
 
         let itemsDiv = this.constructElement("div", "", "", ["items"]);
-
+        List.sortList();
         for (const item of List.items) {
             //outer div
             let itemDiv = this.constructElement("p", "", "", ["item"]);
@@ -123,7 +123,7 @@ export class DOMManipulator {
             desc.textContent = item.desc;
             desc.classList.add("subtext");
 
-            let othersDiv = this.constructElement("div","","",["data-div"]);
+            let othersDiv = this.constructElement("div", "", "", ["data-div"]);
 
             let date = this.constructElement("p", item.dueDate, "", ["subtext", "date"]);
             let priority = this.constructElement("p", `priority: ${item.priority}`, "", ["subtext"]);

@@ -34,6 +34,10 @@ export class TodoList {
         this.tags = [];
         this.items = [];
     }
+
+    sortList() {
+        this.items.sort((a, b) => b.priority - a.priority);
+    }
 }
 Object.assign(TodoList.prototype, addRemoveMixin);
 
