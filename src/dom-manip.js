@@ -123,15 +123,10 @@ export class DOMManipulator {
             desc.textContent = item.desc;
             desc.classList.add("subtext");
 
-            let othersDiv = document.createElement("div");
-            othersDiv.style.display = "flex";
-            othersDiv.style.gap = "1em";
+            let othersDiv = this.constructElement("div","","",["data-div"]);
 
-            let date = document.createElement("p");
-            date.textContent = item.dueDate;
-            date.classList.add("date");
-            let priority = document.createElement("p");
-            priority.textContent = `priority: ${item.priority}`;
+            let date = this.constructElement("p", item.dueDate, "", ["subtext", "date"]);
+            let priority = this.constructElement("p", `priority: ${item.priority}`, "", ["subtext"]);
             othersDiv.append(date, priority);
 
             itemAttrDiv.append(text, desc, othersDiv);

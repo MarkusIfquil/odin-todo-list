@@ -48,10 +48,9 @@ button {
 }
 
 .mark-complete {
-    min-width: 3.6rem;
-    min-height: 3.6rem;
+    min-width: 2rem;
+    min-height: 2rem;
     border-radius: 3em;
-    font-size: 110%;
 }
 
 .mark-complete:hover::after {
@@ -59,13 +58,13 @@ button {
 }
 
 .action-button {
-    font-size: 130%;
+    font-size: 100%;
     min-width: 2.7em;
     border-radius: 3em;
 }
 
 h1 {
-    font-size: 400%;
+    font-size: 300%;
 }
 
 form {
@@ -84,6 +83,7 @@ form {
 
 .subtext {
     color: var(--ctp-frappe-subtext0);
+    font-size: 90%;
 }
 
 .hidden {
@@ -135,7 +135,7 @@ button:hover {
 }
 
 .collapse {
-    min-width: 0 !important;
+    min-width: 4.3em !important;
 }
 
 .actions {
@@ -222,7 +222,7 @@ button:hover {
 }
 
 .items {
-    margin: 2rem;
+    margin: 1rem;
     background-color: var(--ctp-frappe-overlay0);
 
     display: flex;
@@ -237,7 +237,6 @@ button:hover {
 
     display: flex;
     align-items: start;
-    gap: 1em;
+    gap: 0.8em;
 
-    font-size: 120%;
 }
