@@ -3,6 +3,7 @@ import * as Data from "./data";
 export class DOMManipulator {
     constructor(Lists) {
         this.Lists = Lists;
+        this.formSubmitter = new FormSubmitter(this);
     }
 
     constructElement(type, text, id = "", classes) {
@@ -22,7 +23,6 @@ export class DOMManipulator {
     }
 
     drawSidePanel() {
-        let formSubmitter = new FormSubmitter(this);
         //panel
         let panel = document.querySelector(".side-panel");
         panel.innerHTML = "";
@@ -41,62 +41,38 @@ export class DOMManipulator {
         closeButton.onclick = () => this.closeSidePanel();
 
         let addTaskButton = this.constructElement("button", "add task", "add-task");
-
         addTaskButton.onclick = () => {
-            formSubmitter.addListOptions();
-            formSubmitter.showHideForm(document.querySelector("#add-task-form"))
+            this.formSubmitter.addListOptions();
+            this.formSubmitter.showHideForm(document.querySelector("#add-task-form"))
         };
 
         //lists
         let ListsP = this.constructElement("p", "Lists", "add-list", ["hover"]);
-        ListsP.onclick = () => formSubmitter.showHideForm(document.querySelector("#add-list-form"));
+        ListsP.onclick = () => this.formSubmitter.showHideForm(document.querySelector("#add-list-form"));
 
         let listsDiv = this.constructElement("div", "", "", ["lists"]);
         for (const list of this.Lists.items) {
+            //base element
             let listElement = this.constructElement("div", list.title, "argh", ["hover", "list"]);
             listElement.onclick = () => this.changeActiveList(list);
-
-            let actionsButton = this.constructElement("button", "...");
-            actionsButton.style.backgroundColor = "inherit";
-            actionsButton.style.border = "inherit";
-            actionsButton.onclick = (e) => {
-                e.stopPropagation();
-                let dropDown = this.constructElement("div", "", "drop-down-div", ["drop-down"]);
-                let divEdit = this.constructElement("div", "edit", "", ["hover"]);
-                divEdit.onclick = () => {
-                    e.stopPropagation();
-                    let oldNameP = document.querySelector("#old-name");
-                    oldNameP.textContent = list.title;
-                    formSubmitter.showHideForm(document.querySelector("#edit-list-form"));
-                };
-                let divDelete = this.constructElement("div", "delete", "", ["hover"]);
-                divDelete.onclick = () => {
-                    this.Lists.removeItem(list);
-                    this.drawUpdate();
-                };
-
-                dropDown.append(divEdit, divDelete);
-                listElement.appendChild(dropDown);
-
-                function closeDropDown() {
-                    if (!e.target.closest("#drop-down-div")) {
-                        listElement.removeChild(dropDown);
-                        document.removeEventListener("click", closeDropDown);
-                    }
-                }
-
-                document.addEventListener("click", closeDropDown);
-            };
-
-            listElement.append(actionsButton);
 
             if (list == this.Lists.currentList) {
                 listElement.classList.add("active-list");
             }
 
+            //... button
+            let actionsButton = this.constructElement("button", "...");
+            actionsButton.style.backgroundColor = "inherit";
+            actionsButton.style.border = "inherit";
+            actionsButton.onclick = (e) => {
+                e.stopPropagation();
+                let dropDown = this.createDropDown(list);
+                listElement.appendChild(dropDown);
+            };
+            listElement.append(actionsButton);
+
             listsDiv.appendChild(listElement);
         }
-
         panel.append(addTaskButton, ListsP, listsDiv);
     }
 
@@ -165,10 +141,7 @@ export class DOMManipulator {
             editButton.textContent = "edit";
             editButton.classList.add("action-button");
             editButton.onclick = () => {
-                itemAttrDiv.contentEditable = "true";
-                itemAttrDiv.style.border = "solid";
-                saveButton.classList.toggle("hidden");
-                editButton.classList.toggle("hidden");
+                this.changeEditable(itemAttrDiv, saveButton, editButton);
             };
             itemDiv.appendChild(editButton);
 
@@ -176,10 +149,7 @@ export class DOMManipulator {
             saveButton.textContent = "save";
             saveButton.classList.add("hidden", "action-button");
             saveButton.onclick = () => {
-                itemAttrDiv.contentEditable = "false";
-                itemAttrDiv.style.border = "";
-                saveButton.classList.toggle("hidden");
-                editButton.classList.toggle("hidden");
+                this.changeEditable(itemAttrDiv, saveButton, editButton);
                 itemDiv.item.text = text.textContent;
                 itemDiv.item.desc = desc.textContent;
                 itemDiv.item.dueDate = date.textContent;
@@ -205,6 +175,51 @@ export class DOMManipulator {
     onChecked(item) {
         item.removeFromParent();
         this.drawUpdate();
+    }
+
+    createDropDown(list) {
+        let dropDown = this.constructElement("div", "", "drop-down-div", ["drop-down"]);
+
+        let divEdit = this.constructElement("div", "edit", "", ["hover"]);
+        divEdit.onclick = (e) => {
+            e.stopPropagation();
+            let oldNameP = document.querySelector("#old-name");
+            oldNameP.textContent = list.title;
+            this.formSubmitter.showHideForm(document.querySelector("#edit-list-form"));
+        };
+
+        let divDelete = this.constructElement("div", "delete", "", ["hover"]);
+        divDelete.onclick = () => {
+            this.Lists.removeItem(list);
+            this.drawUpdate();
+        };
+
+        function closeDropDown(e) {
+            if (!e.target.closest("#drop-down-div")) {
+                dropDown.parentElement.removeChild(dropDown);
+                document.removeEventListener("click", closeDropDown);
+            }
+        }
+
+        document.addEventListener("click", closeDropDown);
+
+        dropDown.append(divEdit, divDelete);
+        return dropDown;
+    }
+
+    changeEditable(div, button1, button2) {
+        if (div.contentEditable == "true") {
+            div.contentEditable = "false";
+        } else {
+            div.contentEditable = "true";
+        }
+        if (div.style.border == "solid") {
+            div.style.border = "";
+        } else {
+            div.style.border = "solid";
+        }
+        button1.classList.toggle("hidden");
+        button2.classList.toggle("hidden");
     }
 }
 
@@ -262,6 +277,7 @@ export class FormSubmitter {
             name.value = `list ${this.domManip.Lists.items.length}`;
         }
         this.domManip.Lists.addItem(new Data.TodoList(name.value));
+        console.log(this.domManip.Lists);
         this.domManip.drawUpdate();
     }
 

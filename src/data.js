@@ -48,6 +48,7 @@ export class Lists {
     }
 
     renameList(oldName, name) {
+        console.log(oldName, name);
         let list = this.items.find(l => l.title = oldName);
         list.title = name;
     }
