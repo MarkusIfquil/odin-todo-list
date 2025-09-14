@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import * as Data from "./data";
 
 export class DOMManipulator {
@@ -264,24 +265,50 @@ export class FormSubmitter {
         let prior = document.querySelector("#priority");
         let list = document.querySelector("#list");
 
+        if (!main.value) {
+            alert("No title was provided!");
+            return;
+        }
+        if (!date.value) {
+            let currentDate = new Date();
+            const formattedDate = format(currentDate, "yyyy-MM-dd");
+            date.value = formattedDate;
+        }
+        if (!prior.value) {
+            prior.value = 0;
+        }
+
         this.domManip.Lists.appendItemToList(new Data.Item(main.value, desc.value, date.value, prior.value), list.value.trim());
         this.domManip.drawUpdate();
+
+        main.value = "";
+        desc.value = "";
+        date.value = "";
+        prior.value = "";
     }
 
     listFormSubmit() {
         let name = document.querySelector("#list-name");
         if (name.value == "") {
-            name.value = `list ${this.domManip.Lists.items.length}`;
+            name.value = `List ${this.domManip.Lists.items.length}`;
         }
         this.domManip.Lists.addItem(new Data.TodoList(name.value));
-        console.log(this.domManip.Lists);
         this.domManip.drawUpdate();
+
+        name.value = "";
     }
 
     listEditFormSubmit() {
         let name = document.querySelector("#list-name-edit");
+
+        if (name.value == "") {
+            name.value = `List ${this.domManip.Lists.items.length}`;
+        }
+
         let oldName = document.querySelector("#old-name");
         this.domManip.Lists.renameList(oldName.textContent, name.value);
         this.domManip.drawUpdate();
+
+        name.value = "";
     }
 }
