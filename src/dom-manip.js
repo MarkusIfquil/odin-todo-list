@@ -5,15 +5,24 @@ export class DOMManipulator {
         this.Lists = Lists;
     }
 
-    constructElement(type, text, id, classes) {
+    constructElement(type, text, id = "", classes) {
         let element = document.createElement(type);
-        element.textContent = text;
-        element.id = id;
-        element.classList = classes;
+        if (text) {
+            element.textContent = text;
+        }
+        if (id) {
+            element.id = id;
+        }
+        if (classes) {
+            for (const Class of classes) {
+                element.classList.add(Class);
+            }
+        }
         return element;
     }
 
     drawSidePanel() {
+        let formSubmitter = new FormSubmitter(this);
         //panel
         let panel = document.querySelector(".side-panel");
         panel.innerHTML = "";
@@ -31,19 +40,55 @@ export class DOMManipulator {
         let closeButton = document.querySelector("#close-panel");
         closeButton.onclick = () => this.closeSidePanel();
 
-        let addTaskButton = this.constructElement("button","add task","add-task");
+        let addTaskButton = this.constructElement("button", "add task", "add-task");
 
-        let formSubmitter = new FormSubmitter(this);
-        addTaskButton.onclick = () => { formSubmitter.addListOptions(); formSubmitter.showHideForm(document.querySelector("#add-task-form")) };
+        addTaskButton.onclick = () => {
+            formSubmitter.addListOptions();
+            formSubmitter.showHideForm(document.querySelector("#add-task-form"))
+        };
 
         //lists
-        let ListsP = this.constructElement("p","Lists","add-list",["hover"]);
+        let ListsP = this.constructElement("p", "Lists", "add-list", ["hover"]);
         ListsP.onclick = () => formSubmitter.showHideForm(document.querySelector("#add-list-form"));
 
-        let listsDiv = this.constructElement("div","","","lists");
+        let listsDiv = this.constructElement("div", "", "", ["lists"]);
         for (const list of this.Lists.items) {
-            let listElement = this.constructElement("div",list.title,"",["hover","list"]);
+            let listElement = this.constructElement("div", list.title, "argh", ["hover", "list"]);
             listElement.onclick = () => this.changeActiveList(list);
+
+            let actionsButton = this.constructElement("button", "...");
+            actionsButton.style.backgroundColor = "inherit";
+            actionsButton.style.border = "inherit";
+            actionsButton.onclick = (e) => {
+                e.stopPropagation();
+                let dropDown = this.constructElement("div", "", "drop-down-div", ["drop-down"]);
+                let divEdit = this.constructElement("div", "edit", "", ["hover"]);
+                divEdit.onclick = () => {
+                    e.stopPropagation();
+                    let oldNameP = document.querySelector("#old-name");
+                    oldNameP.textContent = list.title;
+                    formSubmitter.showHideForm(document.querySelector("#edit-list-form"));
+                };
+                let divDelete = this.constructElement("div", "delete", "", ["hover"]);
+                divDelete.onclick = () => {
+                    this.Lists.removeItem(list);
+                    this.drawUpdate();
+                };
+
+                dropDown.append(divEdit, divDelete);
+                listElement.appendChild(dropDown);
+
+                function closeDropDown() {
+                    if (!e.target.closest("#drop-down-div")) {
+                        listElement.removeChild(dropDown);
+                        document.removeEventListener("click", closeDropDown);
+                    }
+                }
+
+                document.addEventListener("click", closeDropDown);
+            };
+
+            listElement.append(actionsButton);
 
             if (list == this.Lists.currentList) {
                 listElement.classList.add("active-list");
@@ -64,7 +109,6 @@ export class DOMManipulator {
         openButton.onclick = () => { panel.classList.toggle("collapse"); this.drawSidePanel(); };
 
         panel.appendChild(openButton);
-
     }
 
     drawMainPanel() {
@@ -73,14 +117,14 @@ export class DOMManipulator {
         let mainPanel = document.querySelector(".main-panel");
         mainPanel.innerHTML = "";
 
-        let title = this.constructElement("h1",List.title);
+        let title = this.constructElement("h1", List.title);
         mainPanel.appendChild(title);
 
-        let itemsDiv = this.constructElement("div","","",["items"]);
+        let itemsDiv = this.constructElement("div", "", "", ["items"]);
 
         for (const item of List.items) {
             //outer div
-            let itemDiv = this.constructElement("p","","",["item"]);
+            let itemDiv = this.constructElement("p", "", "", ["item"]);
             itemDiv.item = item;
 
             //inside
@@ -168,6 +212,7 @@ export class FormSubmitter {
     constructor(domManip) {
         this.domManip = domManip;
     }
+
     addControls() {
         let formSubmitButton = document.querySelector("#submit");
         formSubmitButton.onclick = () => { this.taskFormSubmit(); this.showHideForm(document.querySelector("#add-task-form")); };
@@ -180,6 +225,9 @@ export class FormSubmitter {
 
         let submitListButton = document.querySelector("#submit-list");
         submitListButton.onclick = () => { this.listFormSubmit(); this.showHideForm(document.querySelector("#add-list-form")); };
+
+        let submitListEditButton = document.querySelector("#submit-list-edit");
+        submitListEditButton.onclick = () => { this.listEditFormSubmit(); this.showHideForm(document.querySelector("#edit-list-form")) };
     }
 
     showHideForm(form) {
@@ -214,6 +262,13 @@ export class FormSubmitter {
             name.value = `list ${this.domManip.Lists.items.length}`;
         }
         this.domManip.Lists.addItem(new Data.TodoList(name.value));
+        this.domManip.drawUpdate();
+    }
+
+    listEditFormSubmit() {
+        let name = document.querySelector("#list-name-edit");
+        let oldName = document.querySelector("#old-name");
+        this.domManip.Lists.renameList(oldName.textContent, name.value);
         this.domManip.drawUpdate();
     }
 }

@@ -158,7 +158,13 @@ form {
 }
 
 .lists>* {
-    text-align: center;
+    position: relative;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    /* text-align: center; */
     padding: 0.7em;
 
     border-radius: 0.5rem;
@@ -192,3 +198,19 @@ form {
 }
 
 /* .action-button {} */
+
+.drop-down {
+    position: absolute;
+    top: 70%;
+    right: -20%;
+
+    background-color: var(--ctp-frappe-surface0);
+
+    padding: 1em;
+
+    border-radius: 0.5em;
+
+    display: flex;
+    flex-flow: column;
+    gap: 0.5em;
+}

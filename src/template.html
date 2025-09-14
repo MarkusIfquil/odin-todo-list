@@ -1,14 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>yay</title>
 </head>
+
 <body>
     <div class="side-panel"></div>
     <div class="main-panel"></div>
-    
+
     <form id="add-task-form" class="hidden absolute-centered shadow">
         <input type="text" name="main-text" id="main-text" placeholder="title">
         <input type="text" name="description" id="description" placeholder="description">
@@ -27,5 +29,12 @@
         <button type="button" id="cancel-list">cancel</button>
         <button type="button" id="submit-list">add list</button>
     </form>
+    <form id="edit-list-form" class="hidden absolute-centered shadow">
+        <p id="old-name"></p>
+        <input type="text" name="list-name-edit" id="list-name-edit" placeholder="name">
+        <button type="button" id="cancel-list-edit">cancel</button>
+        <button type="button" id="submit-list-edit">save</button>
+    </form>
 </body>
+
 </html>

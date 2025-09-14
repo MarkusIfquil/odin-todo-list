@@ -46,5 +46,10 @@ export class Lists {
         item.parent = list;
         list.addItem(item);
     }
+
+    renameList(oldName, name) {
+        let list = this.items.find(l => l.title = oldName);
+        list.title = name;
+    }
 }
 Object.assign(Lists.prototype, addRemoveMixin);
