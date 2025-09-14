@@ -56,5 +56,60 @@ export class Lists {
         let list = this.items.find(l => l.title == oldName);
         list.title = name;
     }
+
+    findListByName(name) {
+        return this.items.find((l) => l.title == name);
+    }
 }
 Object.assign(Lists.prototype, addRemoveMixin);
+
+export class StorageHandler {
+    constructor(Lists) {
+        this.lists = Lists;
+    }
+
+    getStored() {
+        let parsed = JSON.parse(localStorage.getItem("lists"));
+        if (!parsed) {
+            console.log("NO PARSE");
+            return;
+        }
+        console.log("PARSE");
+        console.log(parsed);
+
+        for (const list of parsed.items) {
+            let newList = new TodoList(list.title);
+
+            for (const item of list.items) {
+                let newItem = new Item(item.text, item.desc, item.dueDate, item.priority, item.checked, item.parent);
+                newList.addItem(newItem);
+            }
+            this.lists.addItem(newList);
+        }
+
+        this.lists.currentList = this.lists.findListByName(parsed.currentList.title);
+        console.log(this.lists);
+    }
+    store() {
+        function getCircularReplacer() {
+            const ancestors = [];
+            return function (key, value) {
+                if (typeof value !== "object" || value === null) {
+                    return value;
+                }
+                // `this` is the object that value is contained in,
+                // i.e., its direct parent.
+                while (ancestors.length > 0 && ancestors.at(-1) !== this) {
+                    ancestors.pop();
+                }
+                if (ancestors.includes(value)) {
+                    return "[Circular]";
+                }
+                ancestors.push(value);
+                return value;
+            };
+        }
+        // console.log(JSON.stringify(this.lists, getCircularReplacer()));
+        localStorage.setItem("lists", JSON.stringify(this.lists, getCircularReplacer()));
+    }
+}

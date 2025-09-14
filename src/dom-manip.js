@@ -158,6 +158,8 @@ export class DOMManipulator {
     drawUpdate() {
         this.drawMainPanel();
         this.drawSidePanel();
+        let storage = new Data.StorageHandler(this.Lists);
+        storage.store();
     }
 
     changeActiveList(list) {
